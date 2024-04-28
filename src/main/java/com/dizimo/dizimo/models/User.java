@@ -15,15 +15,15 @@ public class User {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column (nullable = false, length = 255, unique = true)
+    @Column(nullable = false, length = 255, unique = true)
     private String email;
 
-    @Column (nullable = false, length = 255)
+    @Column(nullable = false, length = 255)
     private String password;
 
-    User () {}
+    User() {
+    }
 
-    
     User(String name, String email, String password) {
         this.name = name;
         this.email = email;
@@ -36,6 +36,22 @@ public class User {
 
     public String getEmail() {
         return email;
-    } 
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 }

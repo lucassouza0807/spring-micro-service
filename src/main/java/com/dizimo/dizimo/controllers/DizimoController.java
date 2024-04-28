@@ -46,14 +46,15 @@ public class DizimoController {
         return repository.save(dizimo);
     }
 
-    @PostMapping("/register-user")
+    /* @PostMapping("/register-user")
     public Object registerUser(@RequestBody Dizimo dizimo) {
         try {
-            Map<String, Object> d = new HashMap<>();
 
-            d.put("message", "teste");
+            Map<String, Object> list = new HashMap<>();
 
-            return new ResponseEntity<>(d, HttpStatus.OK);
+            list.put("message", "teste");
+
+            return new ResponseEntity<>(list, HttpStatus.OK);
 
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
@@ -63,5 +64,5 @@ public class DizimoController {
             return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-    }
+    } */
 }

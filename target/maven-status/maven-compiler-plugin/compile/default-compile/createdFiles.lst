@@ -1,5 +1,5 @@
-com/dizimo/dizimo/models/Dizimo.class
-com/dizimo/dizimo/exceptions/DizimoNotFoundException.class
-com/dizimo/dizimo/dizimoRepository/DizimoRepository.class
-com/dizimo/dizimo/exceptions/DizimoControllerAdvice.class
-com/dizimo/dizimo/DizimoApplication.class
+com\dizimo\dizimo\exceptions\DizimoNotFoundException.class
+com\dizimo\dizimo\dizimoRepository\DizimoRepository.class
+com\dizimo\dizimo\exceptions\DizimoControllerAdvice.class
+com\dizimo\dizimo\DizimoApplication.class
+com\dizimo\dizimo\models\Dizimo.class
