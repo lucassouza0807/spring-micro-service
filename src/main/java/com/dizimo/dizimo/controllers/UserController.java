@@ -10,6 +10,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,16 +39,47 @@ public class UserController {
     @PostMapping("/register-new-user")
     public Object saveUser(@RequestBody User user) {
         try {
-            Map<String, Object> message = new HashMap<>();
 
-            User u = repository.save(user);// User fresh if needed
+            BCryptPasswordEncoder pwd_encoder = new BCryptPasswordEncoder();
+            Map<String, Object> message = new HashMap<>();
+            Map<String, Object> userData = new HashMap<>();
+
+            user.setPassword(pwd_encoder.encode(user.getPassword()));
+
+            User u = repository.save(user);
+            
+            userData.put("nome", u.getName());
+            userData.put("email", u.getEmail());
 
             message.put("message", "Usuario criado com suscesso");
 
-            message.put("fresh", u);
+            message.put("user_data", userData);
 
             return new ResponseEntity<>(message, HttpStatus.OK);
 
+        } catch (Exception e) {
+            Map<String, Object> errorMessage = new HashMap<>();
+
+            errorMessage.put("message", e.getMessage());
+
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/delete-user/{id}")
+    public Object deleteUser(@PathVariable Long id) {
+        try {
+            Map<String, Object> message = new HashMap<>();
+
+            repository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com o id: " + id));
+
+            repository.deleteById(id);
+
+            message.put("message", "Usuário deletado com sucesso");
+
+            return new ResponseEntity<>(message, HttpStatus.OK);
+            // .put(null, message)
         } catch (Exception e) {
             Map<String, Object> errorMessage = new HashMap<>();
 
@@ -62,14 +95,17 @@ public class UserController {
 
             Map<String, Object> message = new HashMap<>();
 
-            repository.findById(id)
+            User usr = repository.findById(id)
                     .map(u -> {
                         u.setEmail(newUser.getEmail());
                         u.setName(newUser.getName());
-                        return repository.save(u); // Terminal operation: save the updated user
+                        return repository.save(u);
                     })
-                    .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
-            message.put("message", newUser.getEmail() + newUser.getPassword());
+                    .orElseThrow(() -> new IllegalArgumentException("Usuário não econtrado com o id: " + id));
+
+            message.put("message", "Usuário: " + usr.getName() + " editado com sucesso.\n");
+
+            message.put("fresh_body", usr);
 
             return new ResponseEntity<>(message, HttpStatus.OK);
 
@@ -78,7 +114,7 @@ public class UserController {
 
             errorMessage.put("message", e.getMessage());
 
-            return new ResponseEntity<>(errorMessage, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
         }
     }
 
