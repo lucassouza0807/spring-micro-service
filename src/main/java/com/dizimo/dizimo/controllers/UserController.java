@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,16 @@ public class UserController {
         this.repository = userRepository;
     }
 
+    @GetMapping("/test-for-auth")
+    Object headerTest(@RequestHeader Map<String, String> header) {
+        Map<Object, String> auth = new HashMap<>();
+
+        auth.put("teste", "sdasd");
+
+        return new ResponseEntity<>(header, HttpStatus.OK);
+
+    }
+
     @PostMapping("/register-new-user")
     public Object saveUser(@RequestBody User user) {
         try {
@@ -47,7 +58,7 @@ public class UserController {
             user.setPassword(pwd_encoder.encode(user.getPassword()));
 
             User u = repository.save(user);
-            
+
             userData.put("nome", u.getName());
             userData.put("email", u.getEmail());
 

@@ -21,15 +21,20 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
+    @Column(nullable = false, length = 50)
+    private String username;
+
     User() {
     }
 
-    User(String name, String email, String password) {
+    User(String name, String email, String password, String username) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.username = username;
     }
 
+    // getters
     public String getName() {
         return name;
     }
@@ -42,6 +47,11 @@ public class User {
         return password;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    // setters
     public void setName(String name) {
         this.name = name;
     }
@@ -52,6 +62,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
 }
